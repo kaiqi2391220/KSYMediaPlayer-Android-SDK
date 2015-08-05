@@ -1,0 +1,17 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--底部菜单字体样式 -->
+    <style name="BottomTextStyle">
+       <!--  <item name="android:textSize">@dimen/word_size</item> -->
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+    <!-- <style name="BottomTextStyle">
+        <item name="android:textSize">@dimen/word_size</item>
+        <item name="android:textColor">@color/balck</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:shadowColor">@color/balck</item>
+    </style> -->
+    
+</resources>

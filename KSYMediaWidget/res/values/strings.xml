@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="player_error">"抱歉,播放出错"</string>
+
+    <string-array name="video_ratio">
+        <item name="16_9">16:9</item>
+        <item name="4_3">4:3</item>
+        <!-- <item name="FullScreen">FullScreen</item>
+        <item name="Origin">Origin</item> -->
+    </string-array>
+
+    <!-- lixp -->
+    <string name="initial_percent">0%</string>
+    <string name="high_definition">高清</string>
+    <string name="standard_definition">标清</string>
+    <string name="sixteen_nine">16:9</string>
+    <string name="episode">剧集</string>
+    <string name="init_time">00:00</string>
+    <string name="total_time">00:00</string>
+    <string name="virgule"> / </string>
+    <string name="time_plus">+</string>
+    <string name="time_minute">-</string>
+    <string name="speed">快进</string>
+    <string name="rewind">快退</string>
+    <string name="king_cloud">金山软件大厦3楼-云存储</string>
+    <string name="replay">重新播放</string>
+    <string name="play_error">哎呀，播放错误啦 </string>
+    <string name="connect_failed">连接失败，请重新连接</string>
+    <string name="video_test">金山云视频测试摄像头-金山软件大厦3楼</string>
+    <string name="loading">加载中，请稍后...</string>
+    <string name="gongfu">功夫</string>
+    <string name="cropscreen_success">截图成功</string>
+
+</resources>
+
+
+
