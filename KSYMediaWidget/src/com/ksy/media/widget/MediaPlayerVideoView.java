@@ -265,9 +265,8 @@ public class MediaPlayerVideoView extends SurfaceView implements IMediaPlayerCon
 				ksyMediaPlayer = new KSYMediaPlayer();
 				ksyMediaPlayer.setAvOption(AvFormatOption_HttpDetectRangeSupport.Disable);
 				ksyMediaPlayer.setOverlayFormat(AvFourCC.SDL_FCC_RV32);
-
 				ksyMediaPlayer.setAvCodecOption("skip_loop_filter", "48");
-				ksyMediaPlayer.setFrameDrop(12);
+				ksyMediaPlayer.setFrameDrop(0);
 				ksyMediaPlayer.setBufferSize(IMediaPlayer.MEDIA_BUFFERSIZE_DEFAULT);
 				ksyMediaPlayer.setAnalyseDuration(IMediaPlayer.MEDIA_ANALYSE_DURATION_DEFAULT * 2);
 				ksyMediaPlayer.setTimeout(IMediaPlayer.MEDIA_TIME_OUT_DEFAULT);

@@ -12,7 +12,7 @@ public final class R {
         /**  <item name="FullScreen">FullScreen</item>
         <item name="Origin">Origin</item> 
          */
-        public static int video_ratio=0x7f070000;
+        public static int video_ratio=0x7f080000;
     }
     public static final class attr {
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -263,86 +263,86 @@ containing a value of this type.
         public static int video_relate=0x7f0200ac;
     }
     public static final class id {
-        public static int action_layout=0x7f09002b;
-        public static int back_image_view=0x7f09001d;
-        public static int back_layout=0x7f09001c;
-        public static int complete_layout=0x7f09002d;
-        public static int complete_replay_image_view=0x7f09002f;
-        public static int complete_replay_layout=0x7f09002e;
-        public static int complete_replay_text_view=0x7f090030;
-        public static int controller_bottom_layout=0x7f090022;
-        public static int controller_top_layout=0x7f090008;
-        public static int controller_volume_iv=0x7f090026;
-        public static int controller_volume_up=0x7f090028;
-        public static int crop_view=0x7f09001f;
-        public static int error_info_title_text_view=0x7f090032;
-        public static int error_layout=0x7f090031;
-        public static int error_replay_image_view=0x7f090034;
-        public static int error_replay_layout=0x7f090033;
-        public static int error_replay_text_view=0x7f090035;
-        public static int event_action_layout=0x7f090029;
-        public static int fullscreen=0x7f090000;
-        public static int image=0x7f09004e;
-        public static int image_back=0x7f090020;
-        public static int image_controller_bright_no=0x7f090005;
-        public static int image_controller_volume_up=0x7f090007;
-        public static int image_logo=0x7f090021;
-        public static int image_seek_rewind=0x7f090042;
-        public static int image_seek_speed=0x7f090045;
-        public static int imageview_poster=0x7f09003d;
-        public static int iv_lock=0x7f090019;
-        public static int iv_volume_status=0x7f090027;
-        public static int ks_camera_buffering_view=0x7f090048;
-        public static int ks_camera_event_action_view=0x7f09004a;
-        public static int ks_camera_loading_view=0x7f090049;
-        public static int ks_camera_video_view=0x7f090047;
-        public static int layoutPop=0x7f09004d;
-        public static int loading_layout=0x7f090036;
-        public static int loading_line_image_view=0x7f090039;
-        public static int loading_logo_image_view=0x7f090037;
-        public static int loading_tip_text_view=0x7f09003a;
-        public static int loading_title_text_view=0x7f090038;
-        public static int media_player_controller_view_large=0x7f09004b;
-        public static int media_player_controller_view_small=0x7f09004c;
-        public static int miniwindow=0x7f090001;
-        public static int pb_buffering=0x7f090003;
-        public static int quality_list_view=0x7f09003c;
-        public static int quality_text_view=0x7f09003b;
-        public static int relatedlistview=0x7f09001b;
-        public static int screen_size_list_view=0x7f090041;
-        public static int screen_size_text_view=0x7f090040;
-        public static int seekbar_bright_progress=0x7f090006;
-        public static int seekbar_video_progress=0x7f090025;
-        public static int title_layout=0x7f09002a;
-        public static int title_text_view=0x7f09001e;
-        public static int tv=0x7f09004f;
-        public static int tv_buffering=0x7f090004;
-        public static int tv_definition=0x7f090011;
-        public static int tv_episode=0x7f090012;
-        public static int tv_movie_name=0x7f09003e;
-        public static int tv_movie_time=0x7f09003f;
-        public static int tv_ratio_mode=0x7f090046;
-        public static int tv_screen_size=0x7f090013;
-        public static int tv_seek_current_position=0x7f090044;
-        public static int tv_sign=0x7f090043;
-        public static int video_current_time_text_view=0x7f09000d;
-        public static int video_fullscreen_image_view=0x7f090024;
-        public static int video_info_layout=0x7f09000b;
-        public static int video_playback_image_view=0x7f090023;
-        public static int video_progress_layout=0x7f090009;
-        public static int video_quality_layout=0x7f09000f;
-        public static int video_screen_size_layout=0x7f090010;
-        public static int video_seekbar=0x7f09000a;
-        public static int video_start_pause_image_view=0x7f09000c;
-        public static int video_total_time_text_view=0x7f09000e;
-        public static int video_window_screen_image_view=0x7f090014;
-        public static int wait_layout=0x7f09002c;
-        public static int widge_control_light_view=0x7f090015;
-        public static int widget_controller_volume=0x7f09001a;
-        public static int widget_lock_view=0x7f090018;
-        public static int widget_seek_view=0x7f090017;
-        public static int widget_video_ratio_view=0x7f090016;
-        public static int window=0x7f090002;
+        public static int action_layout=0x7f06002b;
+        public static int back_image_view=0x7f06001d;
+        public static int back_layout=0x7f06001c;
+        public static int complete_layout=0x7f06002d;
+        public static int complete_replay_image_view=0x7f06002f;
+        public static int complete_replay_layout=0x7f06002e;
+        public static int complete_replay_text_view=0x7f060030;
+        public static int controller_bottom_layout=0x7f060022;
+        public static int controller_top_layout=0x7f060008;
+        public static int controller_volume_iv=0x7f060026;
+        public static int controller_volume_up=0x7f060028;
+        public static int crop_view=0x7f06001f;
+        public static int error_info_title_text_view=0x7f060032;
+        public static int error_layout=0x7f060031;
+        public static int error_replay_image_view=0x7f060034;
+        public static int error_replay_layout=0x7f060033;
+        public static int error_replay_text_view=0x7f060035;
+        public static int event_action_layout=0x7f060029;
+        public static int fullscreen=0x7f060000;
+        public static int image=0x7f06004e;
+        public static int image_back=0x7f060020;
+        public static int image_controller_bright_no=0x7f060005;
+        public static int image_controller_volume_up=0x7f060007;
+        public static int image_logo=0x7f060021;
+        public static int image_seek_rewind=0x7f060042;
+        public static int image_seek_speed=0x7f060045;
+        public static int imageview_poster=0x7f06003d;
+        public static int iv_lock=0x7f060019;
+        public static int iv_volume_status=0x7f060027;
+        public static int ks_camera_buffering_view=0x7f060048;
+        public static int ks_camera_event_action_view=0x7f06004a;
+        public static int ks_camera_loading_view=0x7f060049;
+        public static int ks_camera_video_view=0x7f060047;
+        public static int layoutPop=0x7f06004d;
+        public static int loading_layout=0x7f060036;
+        public static int loading_line_image_view=0x7f060039;
+        public static int loading_logo_image_view=0x7f060037;
+        public static int loading_tip_text_view=0x7f06003a;
+        public static int loading_title_text_view=0x7f060038;
+        public static int media_player_controller_view_large=0x7f06004b;
+        public static int media_player_controller_view_small=0x7f06004c;
+        public static int miniwindow=0x7f060002;
+        public static int pb_buffering=0x7f060003;
+        public static int quality_list_view=0x7f06003c;
+        public static int quality_text_view=0x7f06003b;
+        public static int relatedlistview=0x7f06001b;
+        public static int screen_size_list_view=0x7f060041;
+        public static int screen_size_text_view=0x7f060040;
+        public static int seekbar_bright_progress=0x7f060006;
+        public static int seekbar_video_progress=0x7f060025;
+        public static int title_layout=0x7f06002a;
+        public static int title_text_view=0x7f06001e;
+        public static int tv=0x7f06004f;
+        public static int tv_buffering=0x7f060004;
+        public static int tv_definition=0x7f060011;
+        public static int tv_episode=0x7f060012;
+        public static int tv_movie_name=0x7f06003e;
+        public static int tv_movie_time=0x7f06003f;
+        public static int tv_ratio_mode=0x7f060046;
+        public static int tv_screen_size=0x7f060013;
+        public static int tv_seek_current_position=0x7f060044;
+        public static int tv_sign=0x7f060043;
+        public static int video_current_time_text_view=0x7f06000d;
+        public static int video_fullscreen_image_view=0x7f060024;
+        public static int video_info_layout=0x7f06000b;
+        public static int video_playback_image_view=0x7f060023;
+        public static int video_progress_layout=0x7f060009;
+        public static int video_quality_layout=0x7f06000f;
+        public static int video_screen_size_layout=0x7f060010;
+        public static int video_seekbar=0x7f06000a;
+        public static int video_start_pause_image_view=0x7f06000c;
+        public static int video_total_time_text_view=0x7f06000e;
+        public static int video_window_screen_image_view=0x7f060014;
+        public static int wait_layout=0x7f06002c;
+        public static int widge_control_light_view=0x7f060015;
+        public static int widget_controller_volume=0x7f06001a;
+        public static int widget_lock_view=0x7f060018;
+        public static int widget_seek_view=0x7f060017;
+        public static int widget_video_ratio_view=0x7f060016;
+        public static int window=0x7f060001;
     }
     public static final class layout {
         public static int blue_media_player_buffering_view=0x7f030000;
@@ -423,34 +423,34 @@ containing a value of this type.
         public static int red_media_player_view=0x7f03004b;
     }
     public static final class string {
-        public static int connect_failed=0x7f060010;
-        public static int cropscreen_success=0x7f060014;
-        public static int episode=0x7f060005;
-        public static int gongfu=0x7f060013;
-        public static int high_definition=0x7f060002;
-        public static int init_time=0x7f060006;
+        public static int connect_failed=0x7f070010;
+        public static int cropscreen_success=0x7f070014;
+        public static int episode=0x7f070005;
+        public static int gongfu=0x7f070013;
+        public static int high_definition=0x7f070002;
+        public static int init_time=0x7f070006;
         /**  lixp 
          */
-        public static int initial_percent=0x7f060001;
-        public static int king_cloud=0x7f06000d;
-        public static int loading=0x7f060012;
-        public static int play_error=0x7f06000f;
-        public static int player_error=0x7f060000;
-        public static int replay=0x7f06000e;
-        public static int rewind=0x7f06000c;
-        public static int sixteen_nine=0x7f060004;
-        public static int speed=0x7f06000b;
-        public static int standard_definition=0x7f060003;
-        public static int time_minute=0x7f06000a;
-        public static int time_plus=0x7f060009;
-        public static int total_time=0x7f060007;
-        public static int video_test=0x7f060011;
-        public static int virgule=0x7f060008;
+        public static int initial_percent=0x7f070001;
+        public static int king_cloud=0x7f07000d;
+        public static int loading=0x7f070012;
+        public static int play_error=0x7f07000f;
+        public static int player_error=0x7f070000;
+        public static int replay=0x7f07000e;
+        public static int rewind=0x7f07000c;
+        public static int sixteen_nine=0x7f070004;
+        public static int speed=0x7f07000b;
+        public static int standard_definition=0x7f070003;
+        public static int time_minute=0x7f07000a;
+        public static int time_plus=0x7f070009;
+        public static int total_time=0x7f070007;
+        public static int video_test=0x7f070011;
+        public static int virgule=0x7f070008;
     }
     public static final class style {
         /** 底部菜单字体样式 
          */
-        public static int BottomTextStyle=0x7f080000;
+        public static int BottomTextStyle=0x7f090000;
     }
     public static final class styleable {
         /** Attributes that can be used with a PlayerView.
@@ -481,7 +481,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.ksy.mediaPlayer.widget:lockmode
         */
-        public static int PlayerView_lockmode = 1;
+        public static final int PlayerView_lockmode = 1;
         /**
           <p>This symbol is the offset where the {@link com.ksy.mediaPlayer.widget.R.attr#playmode}
           attribute's value can be found in the {@link #PlayerView} array.
@@ -499,6 +499,6 @@ containing a value of this type.
 </table>
           @attr name com.ksy.mediaPlayer.widget:playmode
         */
-        public static int PlayerView_playmode = 0;
+        public static final int PlayerView_playmode = 0;
     };
 }

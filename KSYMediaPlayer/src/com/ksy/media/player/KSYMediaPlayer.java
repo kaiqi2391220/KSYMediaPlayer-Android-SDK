@@ -97,6 +97,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 		synchronized (KSYMediaPlayer.class) {
 			if (!mIsLibLoaded) {
+//				libLoader.loadLibrary("gnustl_shared");
 				libLoader.loadLibrary("ksyffmpeg");
 				libLoader.loadLibrary("ksyutil");
 				libLoader.loadLibrary("ksysdl");
