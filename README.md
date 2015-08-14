@@ -52,7 +52,8 @@ SDK包含三个工程，其中
 无论使用哪种模型，app开发者都需要实现IDRMRetriverRequest两个接口⽅法，这些接⼝⽅法都在线程池执行，用户无需开启新的线程。
 
 1.app提供AK，sk完成签名,并且提供完整取Key URL的方式（不安全，建议仅测试时使用）
-![](http://who.kssws.ks-cdn.com/drm01.png)
+
+![](http://eflakee.kssws.ks-cdn.com/drm01.png)
 
 
 ```
@@ -72,7 +73,7 @@ SDK包含三个工程，其中
 ```
 
 2.app提供不存放AK,SK，app从appserver获取drm完整url，之后再从ksyserver获取drm
-![](http://who.kssws.ks-cdn.com/drm02.png)
+![](http://eflakee.kssws.ks-cdn.com/drm02.png)
 
 ```
 
@@ -89,7 +90,7 @@ SDK包含三个工程，其中
 ```
 
 3.app提供不存放AK,SK，由appserver访问ksyserver获取drm后返回给APP
-![](http://who.kssws.ks-cdn.com/drm03.png)
+![](http://eflakee.kssws.ks-cdn.com/drm03.png)
 
 ```
 
