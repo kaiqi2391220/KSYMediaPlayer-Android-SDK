@@ -57,8 +57,8 @@ SDK包含三个工程，其中
 
 
 ```
-	//这种本地签名，⽣生成完整url的⽅方式 ，需要APP 保存AK ，SK ，计算签名⽆无需⽤用户实现,也不需要通过⽤用户server
-	//接⼝口调⽤用⽅方法：
+	//这种本地签名，生成完整url的⽅方式 ，需要APP 保存AK ，SK ，计算签名无需用户实现,也不需要通过用户server
+	//接口调用方法：
 	public DRMKey retriveDRMKeyFromAppServer(String cekVersion,String cekUrl){
 	return null;
 	}
@@ -73,11 +73,12 @@ SDK包含三个工程，其中
 ```
 
 2.app提供不存放AK,SK，app从appserver获取drm完整url，之后再从ksyserver获取drm
+
 ![](http://eflakee.kssws.ks-cdn.com/drm02.png)
 
 ```
 
-	//app携带cekURL和cekVersion信息去appserver获取完整drm路劲之后，再请求ksyserver获取DRM，开发者只需要实现
+	//app携带cekURL和cekVersion信息去appserver获取完整drm路径之后，再请求ksyserver获取DRM，开发者只需要实现
 	public DRMFullURL retriveDRMFullUrl(String cekVersion,String cekUrl)throws Exception{
 	//发送http请求，从appserver获取drmurl，之后将url拆解成DRMFullURL对象
 	returnfullURL;
@@ -90,6 +91,7 @@ SDK包含三个工程，其中
 ```
 
 3.app提供不存放AK,SK，由appserver访问ksyserver获取drm后返回给APP
+
 ![](http://eflakee.kssws.ks-cdn.com/drm03.png)
 
 ```
@@ -102,7 +104,7 @@ SDK包含三个工程，其中
 	}
 	
 	public DRMKey retriveDRMKeyFromAppServer(String cekVersion,String cekUrl){
-	//开发者需要在这⾥里构建
+	//开发者需要在这里构建
 	http请求appserver获取drm
 	return DRMKey;
 	}
