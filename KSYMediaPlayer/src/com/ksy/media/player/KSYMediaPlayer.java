@@ -359,7 +359,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public MediaInfo getMediaInfo() {
 
 		MediaInfo mediaInfo = new MediaInfo();
-		mediaInfo.mMediaPlayerName = "ijkplayer";
+		mediaInfo.mMediaPlayerName = "ksyplayer";
 
 		String videoCodecInfo = _getVideoCodecInfo();
 		if (!TextUtils.isEmpty(videoCodecInfo)) {
