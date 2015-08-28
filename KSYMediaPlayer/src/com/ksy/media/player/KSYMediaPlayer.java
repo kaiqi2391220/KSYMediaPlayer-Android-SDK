@@ -5,6 +5,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -32,7 +33,6 @@ import com.ksy.media.player.option.AvFormatOption;
 import com.ksy.media.player.pragma.DebugLog;
 import com.ksy.media.player.util.Constants;
 import com.ksy.media.player.util.IOUtils;
-
 
 public final class KSYMediaPlayer extends BaseMediaPlayer {
 
@@ -74,7 +74,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	private String mDataSource;
 	private String mFFConcatContent;
 
-
 	private static KSYLibLoader sLocalLibLoader = new KSYLibLoader() {
 
 		@Override
@@ -91,7 +90,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 		synchronized (KSYMediaPlayer.class) {
 			if (!mIsLibLoaded) {
-				libLoader.loadLibrary("gnustl_shared");
+				// libLoader.loadLibrary("gnustl_shared");
 				libLoader.loadLibrary("ksyffmpeg");
 				libLoader.loadLibrary("ksyutil");
 				libLoader.loadLibrary("ksysdl");
@@ -140,7 +139,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		native_setup(new WeakReference<KSYMediaPlayer>(this));
 	}
 
-
 	private native void _setVideoSurface(Surface surface);
 
 	@Override
@@ -169,7 +167,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		updateSurfaceScreenOn();
 	}
 
-
 	@Override
 	public void setDataSource(String path) throws IOException,
 			IllegalArgumentException, SecurityException, IllegalStateException {
@@ -183,19 +180,46 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 			SecurityException, IllegalStateException;
 
 	@Override
-	public String getDataSource() {
+	public void setDataSource(String path, Map<String, String> headers)
+			throws IOException, IllegalArgumentException, SecurityException,
+			IllegalStateException {
+		StringBuffer buffer = new StringBuffer();
+		if (headers != null && headers.size() > 0) {
+			for (Entry<String, String> entry : headers.entrySet()) {
+				buffer.append(entry.getKey().toString()).append(":")
+						.append(entry.getValue().toString()).append("\r\n");
+			}
+		}
+		mDataSource = path;
+		_setDataSourceAndHeader(path, buffer.toString());
+		Log.d("eflake", buffer.toString());
+	}
 
+	private native void _setDataSourceAndHeader(String path, String headers)
+			throws IOException, IllegalArgumentException, SecurityException,
+			IllegalStateException;
+
+	@Override
+	public void setCacheInPause(boolean useCacheInPause) throws IOException,
+			IllegalArgumentException, SecurityException, IllegalStateException {
+		_setCacheInPause(useCacheInPause);
+	}
+
+	private native void _setCacheInPause(boolean useCacheInPause)
+			throws IOException, IllegalArgumentException, SecurityException,
+			IllegalStateException;
+
+	@Override
+	public String getDataSource() {
 		return mDataSource;
 	}
 
 	public void setDataSourceAsFFConcatContent(String ffConcatContent) {
-
 		mFFConcatContent = ffConcatContent;
 	}
 
 	@Override
 	public void prepareAsync() throws IllegalStateException {
-
 		if (TextUtils.isEmpty(mFFConcatContent)) {
 			_prepareAsync();
 		} else {
@@ -337,7 +361,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 	private native void _release();
 
-	//TODO
+	// TODO
 	@Override
 	public void reset() {
 
@@ -451,6 +475,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 	private native void _setOpenSLESEnabled(boolean enabled);
 
+	@Override
 	public Bundle getMediaMeta() {
 
 		return _getMediaMeta();
@@ -550,7 +575,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 			case MEDIA_ERROR:
 
-				Log.e(Constants.LOG_TAG, "Error (" + msg.arg1 + "," + msg.arg2 + ")");
+				Log.e(Constants.LOG_TAG, "Error (" + msg.arg1 + "," + msg.arg2
+						+ ")");
 				if (!player.notifyOnError(msg.arg1, msg.arg2)) {
 					player.notifyOnCompletion();
 				}
@@ -559,7 +585,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 			case MEDIA_INFO:
 				if (msg.arg1 != MEDIA_INFO_VIDEO_TRACK_LAGGING) {
-					Log.e(Constants.LOG_TAG, "===============Info (" + msg.arg1 + "," + msg.arg2 + ")");
+					Log.e(Constants.LOG_TAG, "===============Info (" + msg.arg1
+							+ "," + msg.arg2 + ")");
 				}
 				player.notifyOnInfo(msg.arg1, msg.arg2);
 				// No real default action so far.
@@ -589,7 +616,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 				}
 				break;
 
-				//TODO  102 不处理，没有问题，状态改变时抛出
+			// TODO 102 不处理，没有问题，状态改变时抛出
 			default:
 				DebugLog.e(TAG, "Unknown message type " + msg.what);
 				return;
@@ -888,7 +915,9 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public void setAnalyseDuration(int duration) {
 
 		if (duration <= 0) {
-			Log.w(Constants.LOG_TAG, "unsupported analyse duration :" + duration + ",replace the default size :" + MEDIA_ANALYSE_DURATION_DEFAULT);
+			Log.w(Constants.LOG_TAG, "unsupported analyse duration :"
+					+ duration + ",replace the default size :"
+					+ MEDIA_ANALYSE_DURATION_DEFAULT);
 			duration = MEDIA_ANALYSE_DURATION_DEFAULT;
 		}
 		_setAnalyseDuration(duration);
@@ -898,7 +927,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public void setDRMKey(String version, String key) {
 
 		if (checkDRMKey(version, key)) {
-			Log.i(Constants.LOG_TAG, " DRM  version :" + version + ",Cek:" + key);
+			Log.i(Constants.LOG_TAG, " DRM  version :" + version + ",Cek:"
+					+ key);
 			_setDRMKey(version, key);
 		} else {
 			Log.w(Constants.LOG_TAG, "DRM failed with error");
@@ -909,7 +939,9 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public void setTimeout(int timeout) {
 
 		if (timeout <= 0) {
-			Log.w(Constants.LOG_TAG, "unsupported time out  :" + timeout + ",replace the default time out :" + IMediaPlayer.MEDIA_TIME_OUT_DEFAULT);
+			Log.w(Constants.LOG_TAG, "unsupported time out  :" + timeout
+					+ ",replace the default time out :"
+					+ IMediaPlayer.MEDIA_TIME_OUT_DEFAULT);
 			timeout = IMediaPlayer.MEDIA_TIME_OUT_DEFAULT;
 		}
 		_setTimeout(timeout);
@@ -919,7 +951,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	private boolean checkDRMKey(String version, String key) {
 
 		if (TextUtils.isEmpty(version) || TextUtils.isEmpty(key)) {
-			Log.w(Constants.LOG_TAG, "DRM version & key can not be null or empty");
+			Log.w(Constants.LOG_TAG,
+					"DRM version & key can not be null or empty");
 			return false;
 		} else {
 			return true;
@@ -934,27 +967,33 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	 */
 	@Override
 	public boolean setCachedDir(String cachedPath) {
-        Log.d("lixp", "cachedPath = " + cachedPath);
+		Log.d("lixp", "cachedPath = " + cachedPath);
 		if (null == cachedPath || "".equals(cachedPath)) {
-			Log.e(Constants.LOG_TAG, "the cached path is null , so the streaming cached function failure");
+			Log.e(Constants.LOG_TAG,
+					"the cached path is null , so the streaming cached function failure");
 			return false;
 		}
 		File file = new File(cachedPath);
 		if (file.isFile()) {
-			Log.e(Constants.LOG_TAG, "the cached path must be a forder , so the streaming cached function failure");
+			Log.e(Constants.LOG_TAG,
+					"the cached path must be a forder , so the streaming cached function failure");
 			return false;
 		}
-		Log.d("lixp", "file.isFile() = " + file.isFile() + ">>!file.exists() =" + !file.exists() + ">>!file.mkdirs()=" + !file.mkdirs());
+		Log.d("lixp", "file.isFile() = " + file.isFile() + ">>!file.exists() ="
+				+ !file.exists() + ">>!file.mkdirs()=" + !file.mkdirs());
 		if (!file.exists()) {
-			if (!file.mkdirs()) {//TODO
-				Log.e(Constants.LOG_TAG, "the cached forder create fail , so the streaming cached function failure");
+			if (!file.mkdirs()) {// TODO
+				Log.e(Constants.LOG_TAG,
+						"the cached forder create fail , so the streaming cached function failure");
 				return false;
 			}
 		} else {
 			Log.e("lixp", "1064  !file.exists() .......");
 		}
-		
-		Log.i(Constants.LOG_TAG, "the cached forder create success , streaming will cached with path :" + cachedPath);
+
+		Log.i(Constants.LOG_TAG,
+				"the cached forder create success , streaming will cached with path :"
+						+ cachedPath);
 		_setCachedDir(cachedPath);
 		return true;
 	}
@@ -978,7 +1017,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		}
 		File file = new File(cachedPath);
 		if (file.isFile()) {
-			Log.e(Constants.LOG_TAG, "the cached path must be a forder , clear nothing");
+			Log.e(Constants.LOG_TAG,
+					"the cached path must be a forder , clear nothing");
 			return false;
 		}
 
@@ -994,12 +1034,13 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 			return false;
 		}
 
-		if (!file.mkdirs()) {//TODO
+		if (!file.mkdirs()) {// TODO
 			Log.e(Constants.LOG_TAG, "the cached forder recreate failed !");
 			return true;
 		}
 
-		Log.e(Constants.LOG_TAG, "the cached forder clear success , recreate cached forder success");//TODO
+		Log.e(Constants.LOG_TAG,
+				"the cached forder clear success , recreate cached forder success");// TODO
 		return true;
 	}
 

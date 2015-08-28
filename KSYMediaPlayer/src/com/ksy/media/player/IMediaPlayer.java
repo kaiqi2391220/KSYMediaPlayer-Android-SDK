@@ -1,11 +1,13 @@
 package com.ksy.media.player;
 
 import java.io.IOException;
+import java.util.Map;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
@@ -51,6 +53,8 @@ public interface IMediaPlayer {
 	public abstract void setDisplay(SurfaceHolder sh);
 
 	public abstract void setDataSource(String path) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException;
+	
+	public abstract void setDataSource(String path,Map<String, String> headers) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException;
 
 	public abstract String getDataSource();
 
@@ -192,5 +196,10 @@ public interface IMediaPlayer {
 	public abstract boolean clearCachedFiles(String cachedPath);
 
 	public abstract void setLowDelayEnabled(boolean ennable);
+
+	public abstract void setCacheInPause(boolean useCacheInPause) throws IOException, IllegalArgumentException, SecurityException,
+	IllegalStateException;
+	
+	public abstract Bundle getMediaMeta();
 
 }
