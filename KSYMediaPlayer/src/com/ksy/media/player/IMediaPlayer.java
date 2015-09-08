@@ -22,6 +22,7 @@ public interface IMediaPlayer {
 	public static final int MEDIA_INFO_BAD_INTERLEAVING = 800;
 	public static final int MEDIA_INFO_NOT_SEEKABLE = 801;
 	public static final int MEDIA_INFO_METADATA_UPDATE = 802;
+	public static final int MEDIA_INFO_METADATA_SPEED = 803;
 	public static final int MEDIA_INFO_TIMED_TEXT_ERROR = 900;
 
 	public static final int MEDIA_ERROR_SERVER_DIED = 100;

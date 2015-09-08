@@ -122,7 +122,7 @@ public class MediaPlayerView extends RelativeLayout {
 
 	private DRMRetrieverManager mDrmManager;
 	private DRMRetrieverResponseHandler mDrmHandler;
-	
+
 	private RelativeLayout layoutPop;
 	private Handler mHandler = new Handler();
 	private KSYMediaPlayer mKSYMediaPlayer = new KSYMediaPlayer();
@@ -183,26 +183,27 @@ public class MediaPlayerView extends RelativeLayout {
 		}
 
 		/* 初始化UI组件 */
-		
-		if (KsyConstants.SCREEN_VIEW_COLOR == 1) { //蓝色  
+
+		if (KsyConstants.SCREEN_VIEW_COLOR == 1) { // 蓝色
 			this.mRootView = (ViewGroup) mLayoutInflater.inflate(
 					R.layout.blue_media_player_view, null);
-		} else if (KsyConstants.SCREEN_VIEW_COLOR == 2) { //红色
+		} else if (KsyConstants.SCREEN_VIEW_COLOR == 2) { // 红色
 			this.mRootView = (ViewGroup) mLayoutInflater.inflate(
 					R.layout.red_media_player_view, null);
-		} else if (KsyConstants.SCREEN_VIEW_COLOR == 3) { //黄色
+		} else if (KsyConstants.SCREEN_VIEW_COLOR == 3) { // 黄色
 			this.mRootView = (ViewGroup) mLayoutInflater.inflate(
 					R.layout.orange_media_player_view, null);
-		} else if (KsyConstants.SCREEN_VIEW_COLOR == 4) { //绿色
+		} else if (KsyConstants.SCREEN_VIEW_COLOR == 4) { // 绿色
 			this.mRootView = (ViewGroup) mLayoutInflater.inflate(
 					R.layout.green_media_player_view, null);
-		} else if (KsyConstants.SCREEN_VIEW_COLOR == 5) { //粉色
+		} else if (KsyConstants.SCREEN_VIEW_COLOR == 5) { // 粉色
 			this.mRootView = (ViewGroup) mLayoutInflater.inflate(
 					R.layout.pink_media_player_view, null);
 		}
-		
-		this.layoutPop = (RelativeLayout) mRootView.findViewById(R.id.layoutPop);
-		
+
+		this.layoutPop = (RelativeLayout) mRootView
+				.findViewById(R.id.layoutPop);
+
 		this.mMediaPlayerVideoView = (MediaPlayerVideoView) mRootView
 				.findViewById(R.id.ks_camera_video_view);
 		this.mMediaPlayerBufferingView = (MediaPlayerBufferingView) mRootView
@@ -215,7 +216,7 @@ public class MediaPlayerView extends RelativeLayout {
 				.findViewById(R.id.media_player_controller_view_large);
 		this.mMediaPlayerSmallControllerView = (MediaPlayerSmallControllerView) mRootView
 				.findViewById(R.id.media_player_controller_view_small);
-		
+
 		/* 设置播放器监听器 */
 		this.mMediaPlayerVideoView.setOnPreparedListener(mOnPreparedListener);
 		this.mMediaPlayerVideoView
@@ -248,14 +249,15 @@ public class MediaPlayerView extends RelativeLayout {
 		mediaPlayerLoadingViewParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		this.mMediaPlayerLoadingView.hide();
 
-		//截图成功layout
-//		RelativeLayout.LayoutParams mediaPlayerPopViewParams = new LayoutParams(
-//				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		
+		// 截图成功layout
+		// RelativeLayout.LayoutParams mediaPlayerPopViewParams = new
+		// LayoutParams(
+		// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
 		RelativeLayout.LayoutParams mediaPlayerPopViewParams = new LayoutParams(
 				240, 230);
 		mediaPlayerPopViewParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-		
+
 		/* 设置eventActionView UI 参数 */
 		RelativeLayout.LayoutParams mediaPlayereventActionViewParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -365,7 +367,7 @@ public class MediaPlayerView extends RelativeLayout {
 		addView(mMediaPlayerLoadingView, mediaPlayerLoadingViewParams);
 		addView(mMediaPlayerEventActionView, mediaPlayereventActionViewParams);
 		addView(layoutPop, mediaPlayerPopViewParams);
-		
+
 		if (MediaPlayerUtils.isFullScreenMode(mPlayMode)) {
 			addView(mMediaPlayerLargeControllerView,
 					mMediaPlayerControllerViewLargeParams);
@@ -633,18 +635,18 @@ public class MediaPlayerView extends RelativeLayout {
 		WakeLocker.release();
 	}
 
-	//TODO
+	// TODO
 	public void onDestroy() {
 		Log.d("lixp", "MediaPlayerView  636  onDestroy....");
-		new Thread(){
+		new Thread() {
 			@Override
 			public void run() {
 				super.run();
 				mMediaPlayerVideoView.release(true);
 			}
-		 
+
 		}.start();
-		
+
 	}
 
 	private void initOrientationEventListener(Context context) {
@@ -823,17 +825,21 @@ public class MediaPlayerView extends RelativeLayout {
 	// TODO
 	private void changeMovieRatio() {
 
-		/*if (mDisplaySizeMode > MediaPlayerMovieRatioView.MOVIE_RATIO_MODE_ORIGIN) {
-			mDisplaySizeMode = MediaPlayerMovieRatioView.MOVIE_RATIO_MODE_16_9;
-		}*/
-		
+		/*
+		 * if (mDisplaySizeMode >
+		 * MediaPlayerMovieRatioView.MOVIE_RATIO_MODE_ORIGIN) { mDisplaySizeMode
+		 * = MediaPlayerMovieRatioView.MOVIE_RATIO_MODE_16_9; }
+		 */
+
 		if (mDisplaySizeMode > MediaPlayerMovieRatioView.MOVIE_RATIO_MODE_4_3) {
 			mDisplaySizeMode = MediaPlayerMovieRatioView.MOVIE_RATIO_MODE_16_9;
 		}
-		
-//		Log.d("lixp", "790 MediaPlayerView Change Current Width/Heigh Ratio = " + mDisplaySizeMode);
+
+		// Log.d("lixp",
+		// "790 MediaPlayerView Change Current Width/Heigh Ratio = " +
+		// mDisplaySizeMode);
 		mMediaPlayerVideoView.setVideoLayout(mDisplaySizeMode);
-//		mDisplaySizeMode++;
+		// mDisplaySizeMode++;
 	}
 
 	IMediaPlayer.OnPreparedListener mOnPreparedListener = new IMediaPlayer.OnPreparedListener() {
@@ -902,6 +908,9 @@ public class MediaPlayerView extends RelativeLayout {
 		public boolean onInfo(IMediaPlayer mp, int what, int extra) {
 
 			switch (what) {
+			case IMediaPlayer.MEDIA_INFO_METADATA_SPEED:
+//				 Log.i(Constants.LOG_TAG, "MEDIA_INFO_METADATA_SPEED:" +extra);
+				break;
 			// 视频缓冲开始
 			case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
 				Log.i(Constants.LOG_TAG, "MEDIA_INFO_BUFFERING_START");
@@ -1062,8 +1071,8 @@ public class MediaPlayerView extends RelativeLayout {
 		void onError(int errorCode, String errorMsg);
 	}
 
-	//TODO
-	private final MediaPlayerBaseControllerView.MediaPlayerController mMediaPlayerController = new MediaPlayerBaseControllerView.MediaPlayerController() { 
+	// TODO
+	private final MediaPlayerBaseControllerView.MediaPlayerController mMediaPlayerController = new MediaPlayerBaseControllerView.MediaPlayerController() {
 
 		private Bitmap bitmap;
 
@@ -1280,7 +1289,7 @@ public class MediaPlayerView extends RelativeLayout {
 		public void onMovieRatioChange(int screenSize) {
 
 			mMediaPlayerVideoView.setVideoLayout(screenSize);
-//			changeMovieRatio();
+			// changeMovieRatio();
 		}
 
 		@Override
@@ -1338,14 +1347,15 @@ public class MediaPlayerView extends RelativeLayout {
 					mMediaPlayerVideoView.getCurrentFrame(bitmap);
 					compressAndSaveBitmapToSDCard(bitmap, getCurrentTime(),
 							MediaPlayerView.QUALITY_BEST);
-					/*Toast.makeText(
-							getContext(),
-							"screenshoot saved in path :/storage/emulated/0/KSY_SDK_SCREENSHOT",
-							Toast.LENGTH_SHORT).show();*/
-					
+					/*
+					 * Toast.makeText( getContext(),
+					 * "screenshoot saved in path :/storage/emulated/0/KSY_SDK_SCREENSHOT"
+					 * , Toast.LENGTH_SHORT).show();
+					 */
+
 					layoutPop.setVisibility(View.VISIBLE);
 					mHandler.postDelayed(runnableCrop, 1000);
-					
+
 					mScreenshotPreparing = false;
 				} else {
 					Log.d(Constants.LOG_TAG, "bitmap is null");
@@ -1392,7 +1402,7 @@ public class MediaPlayerView extends RelativeLayout {
 		}
 	};
 
-	//延迟操作
+	// 延迟操作
 	Runnable runnableCrop = new Runnable() {
 		@Override
 		public void run() {
@@ -1400,7 +1410,7 @@ public class MediaPlayerView extends RelativeLayout {
 			layoutPop.setVisibility(View.GONE);
 		}
 	};
-	
+
 	private String getCurrentTime() {
 
 		StringBuffer buffer = new StringBuffer();

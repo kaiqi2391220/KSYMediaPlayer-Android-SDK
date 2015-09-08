@@ -47,9 +47,11 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	private static final int MEDIA_TIMED_TEXT = 99;
 	private static final int MEDIA_ERROR = 100;
 	private static final int MEDIA_GET_DRM_KEY = 101;
+	private static final int MEDIA_GET_SPEED = 103;
 	private static final int MEDIA_INFO = 200;
 
 	protected static final int MEDIA_SET_VIDEO_SAR = 10001;
+	private static final int MEDIA_INFO_GET_SPEED = 803;
 
 	@AccessedByNative
 	private long mNativeMediaPlayer;
@@ -606,6 +608,12 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 						player.mVideoSarDen);
 				break;
 
+			case MEDIA_GET_SPEED:
+				Log.e(Constants.LOG_TAG, "KSYMediaPlayer MEDIA_GET_SPEED:" + msg.arg1
+						+ "," + msg.arg2 + ")");
+				 player.notifyOnInfo(msg.arg1, msg.arg2);
+				break;
+				
 			case MEDIA_GET_DRM_KEY:
 				Log.e(TAG, "MEDIA_GET_DRM_KEY");
 				String version = (String) msg.obj;
