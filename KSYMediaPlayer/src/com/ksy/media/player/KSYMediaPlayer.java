@@ -5,6 +5,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -33,10 +34,6 @@ import com.ksy.media.player.pragma.DebugLog;
 import com.ksy.media.player.util.Constants;
 import com.ksy.media.player.util.IOUtils;
 
-/**
- * 
- * Java wrapper of ffplay.
- */
 public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 	private final static String TAG = KSYMediaPlayer.class.getName();
@@ -50,9 +47,11 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	private static final int MEDIA_TIMED_TEXT = 99;
 	private static final int MEDIA_ERROR = 100;
 	private static final int MEDIA_GET_DRM_KEY = 101;
+	private static final int MEDIA_GET_SPEED = 103;
 	private static final int MEDIA_INFO = 200;
 
 	protected static final int MEDIA_SET_VIDEO_SAR = 10001;
+	private static final int MEDIA_INFO_GET_SPEED = 803;
 
 	@AccessedByNative
 	private long mNativeMediaPlayer;
@@ -77,10 +76,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	private String mDataSource;
 	private String mFFConcatContent;
 
-	/**
-	 * Default library loader Load them by yourself, if your libraries are not
-	 * installed at default place.
-	 */
 	private static KSYLibLoader sLocalLibLoader = new KSYLibLoader() {
 
 		@Override
@@ -97,7 +92,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 		synchronized (KSYMediaPlayer.class) {
 			if (!mIsLibLoaded) {
-				libLoader.loadLibrary("gnustl_shared");
+				// libLoader.loadLibrary("gnustl_shared");
 				libLoader.loadLibrary("ksyffmpeg");
 				libLoader.loadLibrary("ksyutil");
 				libLoader.loadLibrary("ksysdl");
@@ -119,25 +114,11 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		}
 	}
 
-	/**
-	 * Default constructor. Consider using one of the create() methods for
-	 * synchronously instantiating a IjkMediaPlayer from a Uri or resource.
-	 * <p>
-	 * When done with the IjkMediaPlayer, you should call {@link #release()}, to
-	 * free the resources. If not released, too many IjkMediaPlayer instances
-	 * may result in an exception.
-	 * </p>
-	 */
 	public KSYMediaPlayer() {
 
 		this(sLocalLibLoader);
 	}
 
-	/**
-	 * do not loadLibaray
-	 * 
-	 * @param reserved
-	 */
 	public KSYMediaPlayer(KSYLibLoader libLoader) {
 
 		initPlayer(libLoader);
@@ -157,32 +138,11 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 			mEventHandler = null;
 		}
 
-		/*
-		 * Native setup requires a weak reference to our object. It's easier to
-		 * create it here than in C++.
-		 */
 		native_setup(new WeakReference<KSYMediaPlayer>(this));
 	}
 
-	/*
-	 * Update the IjkMediaPlayer SurfaceTexture. Call after setting a new
-	 * display surface.
-	 */
 	private native void _setVideoSurface(Surface surface);
 
-	/**
-	 * Sets the {@link SurfaceHolder} to use for displaying the video portion of
-	 * the media.
-	 * 
-	 * Either a surface holder or surface must be set if a display or video sink
-	 * is needed. Not calling this method or {@link #setSurface(Surface)} when
-	 * playing back a video will result in only the audio track being played. A
-	 * null surface holder or surface will result in only the audio track being
-	 * played.
-	 * 
-	 * @param sh
-	 *            the SurfaceHolder to use for video display
-	 */
 	@Override
 	public void setDisplay(SurfaceHolder sh) {
 
@@ -197,25 +157,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		updateSurfaceScreenOn();
 	}
 
-	/**
-	 * Sets the {@link Surface} to be used as the sink for the video portion of
-	 * the media. This is similar to {@link #setDisplay(SurfaceHolder)}, but
-	 * does not support {@link #setScreenOnWhilePlaying(boolean)}. Setting a
-	 * Surface will un-set any Surface or SurfaceHolder that was previously set.
-	 * A null surface will result in only the audio track being played.
-	 * 
-	 * If the Surface sends frames to a {@link SurfaceTexture}, the timestamps
-	 * returned from {@link SurfaceTexture#getTimestamp()} will have an
-	 * unspecified zero point. These timestamps cannot be directly compared
-	 * between different media sources, different instances of the same media
-	 * source, or multiple runs of the same program. The timestamp is normally
-	 * monotonically increasing and is unaffected by time-of-day adjustments,
-	 * but it is reset when the position is set.
-	 * 
-	 * @param surface
-	 *            The {@link Surface} to be used for the video portion of the
-	 *            media.
-	 */
 	@Override
 	public void setSurface(Surface surface) {
 
@@ -228,26 +169,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		updateSurfaceScreenOn();
 	}
 
-	/**
-	 * Sets the data source (file-path or http/rtsp URL) to use.
-	 * 
-	 * @param path
-	 *            the path of the file, or the http/rtsp URL of the stream you
-	 *            want to play
-	 * @throws IllegalStateException
-	 *             if it is called in an invalid state
-	 * 
-	 *             <p>
-	 *             When <code>path</code> refers to a local file, the file may
-	 *             actually be opened by a process other than the calling
-	 *             application. This implies that the pathname should be an
-	 *             absolute path (as any other process runs with unspecified
-	 *             current working directory), and that the pathname should
-	 *             reference a world-readable file. As an alternative, the
-	 *             application could first open the file for reading, and then
-	 *             use the file descriptor form
-	 *             {@link #setDataSource(FileDescriptor)}.
-	 */
 	@Override
 	public void setDataSource(String path) throws IOException,
 			IllegalArgumentException, SecurityException, IllegalStateException {
@@ -261,19 +182,46 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 			SecurityException, IllegalStateException;
 
 	@Override
-	public String getDataSource() {
+	public void setDataSource(String path, Map<String, String> headers)
+			throws IOException, IllegalArgumentException, SecurityException,
+			IllegalStateException {
+		StringBuffer buffer = new StringBuffer();
+		if (headers != null && headers.size() > 0) {
+			for (Entry<String, String> entry : headers.entrySet()) {
+				buffer.append(entry.getKey().toString()).append(":")
+						.append(entry.getValue().toString()).append("\r\n");
+			}
+		}
+		mDataSource = path;
+		_setDataSourceAndHeader(path, buffer.toString());
+		Log.d("eflake", buffer.toString());
+	}
 
+	private native void _setDataSourceAndHeader(String path, String headers)
+			throws IOException, IllegalArgumentException, SecurityException,
+			IllegalStateException;
+
+	@Override
+	public void setCacheInPause(boolean useCacheInPause) throws IOException,
+			IllegalArgumentException, SecurityException, IllegalStateException {
+		_setCacheInPause(useCacheInPause);
+	}
+
+	private native void _setCacheInPause(boolean useCacheInPause)
+			throws IOException, IllegalArgumentException, SecurityException,
+			IllegalStateException;
+
+	@Override
+	public String getDataSource() {
 		return mDataSource;
 	}
 
 	public void setDataSourceAsFFConcatContent(String ffConcatContent) {
-
 		mFFConcatContent = ffConcatContent;
 	}
 
 	@Override
 	public void prepareAsync() throws IllegalStateException {
-
 		if (TextUtils.isEmpty(mFFConcatContent)) {
 			_prepareAsync();
 		} else {
@@ -404,22 +352,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	@Override
 	public native long getDuration();
 
-	/**
-	 * Releases resources associated with this IjkMediaPlayer object. It is
-	 * considered good practice to call this method when you're done using the
-	 * IjkMediaPlayer. In particular, whenever an Activity of an application is
-	 * paused (its onPause() method is called), or stopped (its onStop() method
-	 * is called), this method should be invoked to release the IjkMediaPlayer
-	 * object, unless the application has a special need to keep the object
-	 * around. In addition to unnecessary resources (such as memory and
-	 * instances of codecs) being held, failure to call this method immediately
-	 * if a IjkMediaPlayer object is no longer needed may also lead to
-	 * continuous battery consumption for mobile devices, and playback failure
-	 * for other applications if no multiple instances of the same codec are
-	 * supported on a device. Even if multiple instances of the same codec are
-	 * supported, some performance degradation may be expected when unnecessary
-	 * multiple instances are used at the same time.
-	 */
 	@Override
 	public void release() {
 
@@ -431,7 +363,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 	private native void _release();
 
-	//TODO
+	// TODO
 	@Override
 	public void reset() {
 
@@ -453,7 +385,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public MediaInfo getMediaInfo() {
 
 		MediaInfo mediaInfo = new MediaInfo();
-		mediaInfo.mMediaPlayerName = "ijkplayer";
+		mediaInfo.mMediaPlayerName = "ksyplayer";
 
 		String videoCodecInfo = _getVideoCodecInfo();
 		if (!TextUtils.isEmpty(videoCodecInfo)) {
@@ -511,21 +443,11 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		_setSwScaleOption(name, value);
 	}
 
-	/**
-	 * @param chromaFourCC
-	 *            AvFourCC.SDL_FCC_RV16 AvFourCC.SDL_FCC_RV32
-	 *            AvFourCC.SDL_FCC_YV12
-	 */
 	public void setOverlayFormat(int chromaFourCC) {
 
 		_setOverlayFormat(chromaFourCC);
 	}
 
-	/**
-	 * @param frameDrop
-	 *            =0 do not drop any frame <0 drop as many frames as possible >0
-	 *            display 1 frame per `frameDrop` continuous dropped frames,
-	 */
 	public void setFrameDrop(int frameDrop) {
 
 		_setFrameDrop(frameDrop);
@@ -555,6 +477,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 	private native void _setOpenSLESEnabled(boolean enabled);
 
+	@Override
 	public Bundle getMediaMeta() {
 
 		return _getMediaMeta();
@@ -654,7 +577,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 			case MEDIA_ERROR:
 
-				Log.e(Constants.LOG_TAG, "Error (" + msg.arg1 + "," + msg.arg2 + ")");
+				Log.e(Constants.LOG_TAG, "Error (" + msg.arg1 + "," + msg.arg2
+						+ ")");
 				if (!player.notifyOnError(msg.arg1, msg.arg2)) {
 					player.notifyOnCompletion();
 				}
@@ -663,7 +587,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 			case MEDIA_INFO:
 				if (msg.arg1 != MEDIA_INFO_VIDEO_TRACK_LAGGING) {
-					Log.e(Constants.LOG_TAG, "===============Info (" + msg.arg1 + "," + msg.arg2 + ")");
+					Log.e(Constants.LOG_TAG, "===============Info (" + msg.arg1
+							+ "," + msg.arg2 + ")");
 				}
 				player.notifyOnInfo(msg.arg1, msg.arg2);
 				// No real default action so far.
@@ -683,6 +608,12 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 						player.mVideoSarDen);
 				break;
 
+			case MEDIA_GET_SPEED:
+				Log.e(Constants.LOG_TAG, "KSYMediaPlayer MEDIA_GET_SPEED:" + msg.arg1
+						+ "," + msg.arg2 + ")");
+				 player.notifyOnInfo(msg.arg1, msg.arg2);
+				break;
+				
 			case MEDIA_GET_DRM_KEY:
 				Log.e(TAG, "MEDIA_GET_DRM_KEY");
 				String version = (String) msg.obj;
@@ -693,7 +624,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 				}
 				break;
 
-				//TODO  102 不处理，没有问题，状态改变时抛出
+			// TODO 102 不处理，没有问题，状态改变时抛出
 			default:
 				DebugLog.e(TAG, "Unknown message type " + msg.what);
 				return;
@@ -701,13 +632,6 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		}
 	}
 
-	/*
-	 * Called from native code when an interesting event happens. This method
-	 * just uses the EventHandler system to post the event back to the main app
-	 * thread. We use a weak reference to the original IjkMediaPlayer object so
-	 * that the native code is safe from the object disappearing from underneath
-	 * it. (This is the cookie passed to native_setup().)
-	 */
 	@CalledByNative
 	private static void postEventFromNative(Object weakThiz, int what,
 			int arg1, int arg2, Object obj) {
@@ -999,7 +923,9 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public void setAnalyseDuration(int duration) {
 
 		if (duration <= 0) {
-			Log.w(Constants.LOG_TAG, "unsupported analyse duration :" + duration + ",replace the default size :" + MEDIA_ANALYSE_DURATION_DEFAULT);
+			Log.w(Constants.LOG_TAG, "unsupported analyse duration :"
+					+ duration + ",replace the default size :"
+					+ MEDIA_ANALYSE_DURATION_DEFAULT);
 			duration = MEDIA_ANALYSE_DURATION_DEFAULT;
 		}
 		_setAnalyseDuration(duration);
@@ -1009,7 +935,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public void setDRMKey(String version, String key) {
 
 		if (checkDRMKey(version, key)) {
-			Log.i(Constants.LOG_TAG, " DRM  version :" + version + ",Cek:" + key);
+			Log.i(Constants.LOG_TAG, " DRM  version :" + version + ",Cek:"
+					+ key);
 			_setDRMKey(version, key);
 		} else {
 			Log.w(Constants.LOG_TAG, "DRM failed with error");
@@ -1020,7 +947,9 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	public void setTimeout(int timeout) {
 
 		if (timeout <= 0) {
-			Log.w(Constants.LOG_TAG, "unsupported time out  :" + timeout + ",replace the default time out :" + IMediaPlayer.MEDIA_TIME_OUT_DEFAULT);
+			Log.w(Constants.LOG_TAG, "unsupported time out  :" + timeout
+					+ ",replace the default time out :"
+					+ IMediaPlayer.MEDIA_TIME_OUT_DEFAULT);
 			timeout = IMediaPlayer.MEDIA_TIME_OUT_DEFAULT;
 		}
 		_setTimeout(timeout);
@@ -1030,7 +959,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	private boolean checkDRMKey(String version, String key) {
 
 		if (TextUtils.isEmpty(version) || TextUtils.isEmpty(key)) {
-			Log.w(Constants.LOG_TAG, "DRM version & key can not be null or empty");
+			Log.w(Constants.LOG_TAG,
+					"DRM version & key can not be null or empty");
 			return false;
 		} else {
 			return true;
@@ -1045,27 +975,33 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 	 */
 	@Override
 	public boolean setCachedDir(String cachedPath) {
-        Log.d("lixp", "cachedPath = " + cachedPath);
+		Log.d("lixp", "cachedPath = " + cachedPath);
 		if (null == cachedPath || "".equals(cachedPath)) {
-			Log.e(Constants.LOG_TAG, "the cached path is null , so the streaming cached function failure");
+			Log.e(Constants.LOG_TAG,
+					"the cached path is null , so the streaming cached function failure");
 			return false;
 		}
 		File file = new File(cachedPath);
 		if (file.isFile()) {
-			Log.e(Constants.LOG_TAG, "the cached path must be a forder , so the streaming cached function failure");
+			Log.e(Constants.LOG_TAG,
+					"the cached path must be a forder , so the streaming cached function failure");
 			return false;
 		}
-		Log.d("lixp", "file.isFile() = " + file.isFile() + ">>!file.exists() =" + !file.exists() + ">>!file.mkdirs()=" + !file.mkdirs());
+		Log.d("lixp", "file.isFile() = " + file.isFile() + ">>!file.exists() ="
+				+ !file.exists() + ">>!file.mkdirs()=" + !file.mkdirs());
 		if (!file.exists()) {
-			if (!file.mkdirs()) {//TODO
-				Log.e(Constants.LOG_TAG, "the cached forder create fail , so the streaming cached function failure");
+			if (!file.mkdirs()) {// TODO
+				Log.e(Constants.LOG_TAG,
+						"the cached forder create fail , so the streaming cached function failure");
 				return false;
 			}
 		} else {
 			Log.e("lixp", "1064  !file.exists() .......");
 		}
-		
-		Log.i(Constants.LOG_TAG, "the cached forder create success , streaming will cached with path :" + cachedPath);
+
+		Log.i(Constants.LOG_TAG,
+				"the cached forder create success , streaming will cached with path :"
+						+ cachedPath);
 		_setCachedDir(cachedPath);
 		return true;
 	}
@@ -1089,7 +1025,8 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 		}
 		File file = new File(cachedPath);
 		if (file.isFile()) {
-			Log.e(Constants.LOG_TAG, "the cached path must be a forder , clear nothing");
+			Log.e(Constants.LOG_TAG,
+					"the cached path must be a forder , clear nothing");
 			return false;
 		}
 
@@ -1105,12 +1042,13 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 			return false;
 		}
 
-		if (!file.mkdirs()) {//TODO
+		if (!file.mkdirs()) {// TODO
 			Log.e(Constants.LOG_TAG, "the cached forder recreate failed !");
 			return true;
 		}
 
-		Log.e(Constants.LOG_TAG, "the cached forder clear success , recreate cached forder success");//TODO
+		Log.e(Constants.LOG_TAG,
+				"the cached forder clear success , recreate cached forder success");// TODO
 		return true;
 	}
 
@@ -1134,7 +1072,7 @@ public final class KSYMediaPlayer extends BaseMediaPlayer {
 
 	private native void _setTimeout(int timeout);
 
-	private native void _setCachedDir(String cachedPath);//宝宝巴士缓存目录
+	private native void _setCachedDir(String cachedPath);
 
 	private native void _setLowDelayEnabled(boolean enabled);
 
